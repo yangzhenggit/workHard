@@ -1,4 +1,4 @@
-<tempale>
+<template>
    <div class="tab">
      <router-link tag="div" class="tab-item" to="/recommend">
        <span class="tab-link">推荐</span>
@@ -13,11 +13,11 @@
        <span class="tab-link">搜索</span>
      </router-link>
    </div>
-</tempale>
+</template>
 <script>
   export default{}
 </script>
-<style scoped rel="stylesheet/stylus">
+<style scoped lang="stylus" rel="stylesheet/stylus">
   @import "~common/stylus/variable"
   .tab
     display: flex

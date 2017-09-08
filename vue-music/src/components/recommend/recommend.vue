@@ -1,8 +1,16 @@
-<tempale>
+<template>
+  <div>
     recommend
-</tempale>
+  </div>
+</template>
 <script>
-    export default{}
+    export default{
+      data(){
+        return{
+
+        }
+      }
+    }
 </script>
 <style scoped rel="stylesheet/stylus">
 

@@ -9,7 +9,11 @@ function resolve(dir) {
 
 module.exports = {
   entry: {
-    app: './src/main.js'
+    app: './src/main.js',
+    vendor: [
+      'vue',
+      'vue-router',
+    ]
   },
   output: {
     path: config.build.assetsRoot,
@@ -19,9 +23,10 @@ module.exports = {
       : config.dev.assetsPublicPath
   },
   resolve: {
-    extensions: ['.js', '.vue', '.json'],
+    extensions: [ '.js', '.css', '.scss','.vue'],
     alias: {
       '@': resolve('src'),
+      'vue$': 'vue/dist/vue.js',
       'common': resolve('src/common'),
       'components': resolve('src/components'),
       'base': resolve('src/base'),

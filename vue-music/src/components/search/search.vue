@@ -1,6 +1,8 @@
-<tempale>
-  search
-</tempale>
+<template>
+  <div>
+    search
+  </div>
+</template>
 <script>
   export default{}
 </script>
