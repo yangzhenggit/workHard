@@ -1,6 +1,6 @@
 <template>
   <div>
-    rank
+    排行
   </div>
 </template>
 <script>

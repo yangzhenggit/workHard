@@ -1,6 +1,6 @@
 <template>
   <div>
-    singer
+    歌手
   </div>
 </template>
 <script>
