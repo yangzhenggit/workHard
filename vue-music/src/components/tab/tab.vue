@@ -27,6 +27,7 @@
     .tab-item
       flex: 1
       text-align: center
+      cursor: pointer
       .tab-link
         padding-bottom: 5px
         color: $color-text-l
