@@ -3,7 +3,7 @@ export const commonParams = {
   inChartset: '',
   outChartset: '',
   notice: 0,
-  format: 'json'
+  format: 'jsonp'
 }
 
 export const options = {
