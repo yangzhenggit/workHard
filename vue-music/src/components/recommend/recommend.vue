@@ -4,13 +4,22 @@
   </div>
 </template>
 <script>
-    export default{
-      data() {
-        return {
+  import {getRecommened} from 'api/recommend.js'
+  export default{
+    data() {
+      return {
 
-        }
+      }
+    },
+    created() {
+      this._getRecommend()
+    },
+    methods: {
+      _getRecommend() {
+        getRecommened()
       }
     }
+  }
 </script>
 <style scoped rel="stylesheet/stylus">
 
