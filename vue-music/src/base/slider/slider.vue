@@ -10,6 +10,7 @@
 </template>
 <script type="text/ecmascript-6">
     import BScroll from 'better-scroll'
+    import addClass from 'common/js/dom'
     export default {
       name: 'slider',
       props: {
@@ -36,11 +37,34 @@
         setTimeout(() => {
           this._setSliderWidth()
           this._initSlider()
+          this._initDots()
+          if (!this.autoplay) {
+            return
+          }
         }, 20)
+        window.addEventListener('resize', () => {
+          if (!this.slider) {
+            return
+          }
+          this._setSliderWidth(true);
+          this.slider.refresh()
+        })
       },
       methods: {
-        _setSliderWidth() {
-          this.children = this.refs.sliderGroup.children
+        _setSliderWidth(isResize) {
+          this.children = this.$refs.sliderGroup.children
+          let width = 0
+          let sliderWidth = this.refs.slider.clientWidth
+          for (var i = 0; i < this.children.length; i++) {
+            let child = this.children[i]
+            addClass(child, 'slider-item')
+            child.width = sliderWidth + 'px'
+            width = width + sliderWidth
+          }
+          if (this.loop && !isResize) {
+            width += 2 * sliderWidth
+          }
+          this.$refs.sliderGroup.style.width = width + 'px'
         },
         _initSlider() {
           this.slider = new BScroll(this.refs.slider, {
@@ -62,9 +86,23 @@
               this._play()
             }
           })
+          this.slider.on('beforeScrollStart', () => {
+            if (this.autoplay) {
+              clearTimeout(this.timmer)
+            }
+          })
         },
         _initDots() {
           this.dots = new Array(this.children.length)
+        },
+        _play() {
+          let pageIndex = this.currntPageIndex + 1
+          if (this.loop) {
+            pageIndex += 1
+          }
+          this.timmer = setTimeout(() => {
+            this.slider.getCurrentPage(pageIndex, 0, 400)
+          }, this.interval)
         }
       }
     }
