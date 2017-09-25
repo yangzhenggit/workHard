@@ -1,6 +1,6 @@
 <template>
   <div class="recommend" ref="recommend">
-      <scroll ref="scroll" class="recommend-content">
+      <scroll ref="scroll" class="recommend-content" :data="discList">
         <div>
             <div v-if="recommends.length" class="slider-wrapper" ref="sliderWrapper">
           <slider>
@@ -12,19 +12,19 @@
           </slider>
         </div>
             <div class="recommend-list">
-        <h1 class="list-title">热门歌单推荐</h1>
-        <ul>
-          <li v-for="item in discList" class="item">
-            <div class="icon">
-              <img width="60" height="60" :src="item.imgUrl" alt="">
+              <h1 class="list-title">热门歌单推荐</h1>
+              <ul>
+                <li v-for="item in discList" class="item">
+                  <div class="icon">
+                    <img width="60" height="60" :src="item.imgurl" alt="">
+                  </div>
+                  <div class="text">
+                    <h2 class="name" v-html="item.creator.name"></h2>
+                    <p class="desc" v-html="item.dissname"></p>
+                  </div>
+                </li>
+              </ul>
             </div>
-            <div class="text">
-              <h2 class="name" v-html="item.creator.name"></h2>
-              <p class="desc" v-html="item.dissname"></p>
-            </div>
-          </li>
-        </ul>
-      </div>
         </div>
         <div class="loading-container" v-if="!discList.length">
           <loading></loading>
@@ -32,10 +32,11 @@
       </scroll>
   </div>
 </template>
-<script>
+<script type="text/ecmascript-6">
   import {getRecommened, getDiscList} from 'api/recommend.js'
   import {ERR_OK} from 'api/config.js'
   import Slider from 'base/slider/slider'
+  import Scroll from 'base/scroll/scroll'
   import loading from 'base/loading/loading'
   export default{
     data() {
@@ -66,7 +67,8 @@
     },
     components: {
       Slider,
-      loading
+      loading,
+      Scroll
     }
   }
 </script>
