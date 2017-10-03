@@ -4,6 +4,9 @@
   </div>
 </template>
 <script>
+  import Listview from 'base/listview/listview'
+  import {getSingerList} from 'api/singer.js'
+  import {ERR_OK} from 'api/config'
   export default{
       data() {
           return {
@@ -15,7 +18,11 @@
       },
       methods: {
           _getSingerList() {
-
+            getSingerList().then( (res)=> {
+                if (resizeBy.code === ERR_OK) {
+                    this.singers = res.data.list
+                }
+            })
           }
       }
   }
