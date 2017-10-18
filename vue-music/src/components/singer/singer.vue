@@ -4,18 +4,12 @@
   </div>
 </template>
 <script>
-<<<<<<< HEAD
-  import Listview from 'base/listview/listview'
-  import {getSingerList} from 'api/singer.js'
-  import {ERR_OK} from 'api/config'
-=======
   import {getSingerList} from 'api/singer.js'
   import {ERR_OK} from 'api/config.js'
   import ListView from 'base/listview/listview'
   import Singer from 'common/js/singer'
   const HOT_NAME = '热门'
   const HOT_SINGER_LEN = 10
->>>>>>> 3feab8da5fc2bae560e68a9e0e6d2bffbf072059
   export default{
     data() {
       return {
@@ -34,18 +28,6 @@
           }
         })
       },
-<<<<<<< HEAD
-      created() {
-          this._getSingerList();
-      },
-      methods: {
-          _getSingerList() {
-            getSingerList().then( (res)=> {
-                if (resizeBy.code === ERR_OK) {
-                    this.singers = res.data.list
-                }
-            })
-=======
       _normalizeSinger(list) {
         let map = {
           hot: {
@@ -81,7 +63,6 @@
             ret.push(val)
           } else if (val.title === HOT_NAME) {
             hot.push(val)
->>>>>>> 3feab8da5fc2bae560e68a9e0e6d2bffbf072059
           }
         }
         ret.sort((a, b) => {

@@ -1,20 +1,4 @@
 <template>
-<<<<<<< HEAD
-    <scroll :data="data">
-      <ul>
-        <li v-for="group in data" ref="listGroup">
-          <h2 class="list-group-title">{{group.title}}</h2>
-        </li>
-      </ul>
-    </scroll>
-</template>
-<style>
-
-</style>
-<script>
-
-</script>
-=======
   <scroll :data="data" class="listview" ref="listview">
     <ul>
       <li v-for="group in data" class="list-group">
@@ -27,6 +11,13 @@
           </ul>
       </li>
     </ul>
+    <div class="list-shortcut">
+      <ul>
+        <li v-for="(item, index) in shortcutList" class='item' :class="{'current': currentIndex === index}">
+          {{item}}
+        </li>
+      </ul>
+    </div>
     <div class="loading-container" v-if="!data.length">
         <loading></loading>
     </div>
@@ -116,4 +107,3 @@
       top: 50%
       transform: translateY(-50%)
 </style>
->>>>>>> 3feab8da5fc2bae560e68a9e0e6d2bffbf072059
