@@ -4,15 +4,37 @@
   </div>
 </template>
 <script>
+<<<<<<< HEAD
   import Listview from 'base/listview/listview'
   import {getSingerList} from 'api/singer.js'
   import {ERR_OK} from 'api/config'
+=======
+  import {getSingerList} from 'api/singer.js'
+  import {ERR_OK} from 'api/config.js'
+  import ListView from 'base/listview/listview'
+  import Singer from 'common/js/singer'
+  const HOT_NAME = '热门'
+  const HOT_SINGER_LEN = 10
+>>>>>>> 3feab8da5fc2bae560e68a9e0e6d2bffbf072059
   export default{
-      data() {
-          return {
-              singers: []
+    data() {
+      return {
+        singers: []
+      }
+    },
+    created() {
+      this._getSingerList()
+    },
+    methods: {
+      _getSingerList() {
+        getSingerList().then((res) => {
+          if (res.code === ERR_OK) {
+            this.singers = this._normalizeSinger(res.data.list)
+            console.log(this.singers)
           }
+        })
       },
+<<<<<<< HEAD
       created() {
           this._getSingerList();
       },
@@ -23,8 +45,54 @@
                     this.singers = res.data.list
                 }
             })
+=======
+      _normalizeSinger(list) {
+        let map = {
+          hot: {
+            title: HOT_NAME,
+            items: []
           }
+        }
+        list.forEach((item, index) => {
+          if (index < HOT_SINGER_LEN) {
+            map.hot.items.push(new Singer({
+              name: item.Fsinger_name,
+              id: item.Fsinger_mid
+            }))
+          }
+          const key = item.Findex
+          if (!map[key]) {
+            map[key] = {
+              title: key,
+              items: []
+            }
+          }
+          map[key].items.push(new Singer({
+            name: item.Fsinger_name,
+            id: item.Fsinger_mid
+          }))
+        })
+        // 为了得到有序列表，我们需要处理 map
+        let ret = []
+        let hot = []
+        for (let key in map) {
+          let val = map[key]
+          if (val.title.match(/[a-zA-Z]/)) {
+            ret.push(val)
+          } else if (val.title === HOT_NAME) {
+            hot.push(val)
+>>>>>>> 3feab8da5fc2bae560e68a9e0e6d2bffbf072059
+          }
+        }
+        ret.sort((a, b) => {
+          return a.title.charCodeAt(0) - b.title.charCodeAt(0)
+        })
+        return hot.concat(ret)
       }
+    },
+    components: {
+      ListView
+    }
   }
 </script>
 <style scoped lang="stylus" rel="stylesheet/stylus">
