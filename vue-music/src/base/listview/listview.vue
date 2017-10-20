@@ -34,6 +34,18 @@
         default: []
       }
     },
+    data() {
+      return {
+        currentIndex: 0
+      }
+    },
+    computed: {
+      shortcutList() {
+        return this.data.map((v, k) => {
+          return v.title.substr(0, 1)
+        })
+      }
+    },
     components: {
       Scroll,
       Loading
