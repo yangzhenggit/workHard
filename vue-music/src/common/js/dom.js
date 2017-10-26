@@ -12,7 +12,6 @@ export function addClass(el, className) {
 }
 export function getData(el, name, val) {
   const prefix = 'data-'
-  name = prefix + name
   if (val) {
     return el.setAttribute(prefix + name, val)
   }
