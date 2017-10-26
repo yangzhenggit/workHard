@@ -4,12 +4,13 @@
     :listen-scroll="listenScroll"
     :probe-type="probeType"
     @scroll="scroll"
-    class="listview" ref="listview">
+    class="listview"
+    ref="listview">
     <ul>
       <li v-for="group in data" class="list-group" ref="listGroup">
           <h2 class="list-group-title">{{group.title}}</h2>
           <ul>
-              <li v-for="item in group.items" class="list-group-item">
+              <li @click="selectItem(item)" v-for="item in group.items" class="list-group-item">
                   <img class="avatar" v-lazy="item.avatar" alt="">
                   <span class="name">{{item.name}}</span>
               </li>
@@ -23,6 +24,9 @@
         </li>
       </ul>
     </div>
+    <div class="list-fixed" ref="fixed" v-show="fixedTitle">
+      <div class="fixed-title">{{fixedTitle}} </div>
+    </div>
     <div class="loading-container" v-if="!data.length">
         <loading></loading>
     </div>
@@ -33,6 +37,7 @@
   import Loading from 'base/loading/loading'
   import {getData} from 'common/js/dom'
   const ANCHOR_HEIGHT = 18
+  const TITLE_HEIGHT = 30
   export default {
     props: {
       data: {
@@ -43,7 +48,8 @@
     data() {
       return {
         currentIndex: 0,
-        scrollY: -1
+        scrollY: -1,
+        diff: -1
       }
     },
     created() {
@@ -57,9 +63,18 @@
         return this.data.map((v, k) => {
           return v.title.substr(0, 1)
         })
+      },
+      fixedTitle() {
+        if (this.scrollY > 0) {
+          return ''
+        }
+        return this.data[this.currentIndex] ? this.data[this.currentIndex].title : ''
       }
     },
     methods: {
+      selectItem(item) {
+        this.$emit('select', item)
+      },
       onShortcutTouchStart(e) {
         let firstTouch = e.touches[0]
         let anchorIndex = getData(e.target, 'index')
@@ -117,11 +132,20 @@
           let height = listHeight[i]
           let height2 = listHeight[i + 1]
           if (-newY >= height && -newY < height2) {
+            this.diff = height2 + newY
             this.currentIndex = i
             return
           }
         }
         this.currentIndex = listHeight.length - 2
+      },
+      diff(newVal) {
+        let fixedTop = (newVal > 0 && newVal < TITLE_HEIGHT) ? newVal - TITLE_HEIGHT : 0
+        if (this.fixedTops === fixedTop) {
+          return
+        }
+        this.fixedTops = fixedTop
+        this.$refs.fixed.style.transform = `translate3d(0,${this.fixedTops}px,0)`
       }
     },
     components: {
