@@ -28,7 +28,10 @@
   import Scroll from 'base/scroll/scroll'
   import Loading from 'base/loading/loading'
   import SongList from 'base/song-list/song-list'
+  import {prefixStyle} from 'common/js/dom'
   const RESERVED_HEIGHT = 40
+  const transform = prefixStyle('transform')
+  const backdrop = prefixStyle('backdrop-filter')
   export default {
     props: {
       title: {
@@ -63,6 +66,14 @@
       this.minTransalteY = -this.imageHeight + RESERVED_HEIGHT
       this.$refs.list.$el.style.top = `${this.imageHeight}px`
     },
+    methods: {
+      back() {
+        this.$router.back()
+      },
+      scroll(pos) {
+        this.scrollY = pos.y
+      }
+    },
     watch: {
       scrollY(newY) {
         let scale = 1
@@ -76,8 +87,8 @@
         } else {
           blur = Math.min(20, percent * 20)
         }
-        this.$refs.layer.style[transform] = `translate3d(0, ${translateY}px, 0)`
-        this.$refs.filter.style[backdrop] = `blur(${blur})px`
+        this.$refs.layer.style[transform] = `translate3d(0,${translateY}px,0)`
+        this.$refs.filter.style[backdrop] = `blur(${blur}px)`
         if (newY < this.minTransalteY) {
           zIndex = 10
           this.$refs.bgImage.style.paddingTop = 0
@@ -90,14 +101,6 @@
         }
         this.$refs.bgImage.style[transform] = `scale(${scale})`
         this.$refs.bgImage.style.zIndex = zIndex
-      }
-    },
-    methods: {
-      back() {
-        this.$router.back()
-      },
-      scroll(pos) {
-        this.scrollY = pos.y
       }
     },
     components: {
