@@ -18,27 +18,33 @@ export function getData(el, name, val) {
   return el.getAttribute(prefix + name)
 }
 let elementStyle = document.createElement('div').style
-let vander = (() => {
+
+let vendor = (() => {
   let transformNames = {
-    webkit: 'webketTransform',
+    webkit: 'webkitTransform',
     Moz: 'MozTransform',
     O: 'OTransform',
     ms: 'msTransform',
     standard: 'transform'
   }
-  for (let i in transformNames) {
-    if (elementStyle[transformNames[i]] !== undefined) {
-      return i
+
+  for (let key in transformNames) {
+    if (elementStyle[transformNames[key]] !== undefined) {
+      return key
     }
-    return false
   }
+
+  return false
 })()
-export function prefixStyle (style) {
-  if (!vander) {
+
+export function prefixStyle(style) {
+  if (vendor === false) {
     return false
   }
-  if (vander === 'standard') {
+
+  if (vendor === 'standard') {
     return style
   }
-  return vander + style.charAt(0) + style.substr(1)
+
+  return vendor + style.charAt(0).toUpperCase() + style.substr(1)
 }

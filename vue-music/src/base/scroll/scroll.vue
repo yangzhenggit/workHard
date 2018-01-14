@@ -1,5 +1,5 @@
 <template>
-  <div ref="wrapper">
+  <div ref="wrapper" class="wrapperClass">
     <slot></slot>
   </div>
 </template>
@@ -50,7 +50,8 @@
         }
         this.scroll = new BScroll(this.$refs.wrapper, {
           probeType: this.probeType,
-          click: this.click
+          click: this.click,
+          hasVerticalScroll: true
         })
 
         if (this.listenScroll) {
