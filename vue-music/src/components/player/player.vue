@@ -5,43 +5,50 @@
           <img width="100%" height="100%" :src="currentSong.image" alt="">
         </div>
         <div class="top">
-          <div class="black">
+          <div class="back" @click="back">
             <i class="icon-back"></i>
           </div>
           <div class="title" v-html="currentSong.name"></div>
           <div class="subtitle" v-html="currentSong.singer"></div>
         </div>
         <div class="middle">
-          123
+          <div class="middle-l">
+            <div class="cd-wrapper">
+              <div class="cd">
+                <img class="image" :src="currentSong.image" alt="">
+              </div>
+            </div>
+          </div>
         </div>
         <div class="bottom">
           <div class="operators">
             <div class="icon i-left">
-              <i class="iconMode"></i>
+              <i class="icon-sequence"></i>
             </div>
             <div class="icon i-left">
               <i class="icon-prev"></i>
             </div>
             <div class="icon i-center">
-              <i class="playIcon"></i>
+              <i class="icon-play"></i>
             </div>
-            <div class="operators">
-              <div class="icon i-left"></div>
+            <div class="icon i-right">
+              <div class="icon icon-next"></div>
             </div>
-            <div class="icon i-left">
-              <i class="icon-prev"></i>
+            <div class="icon i-right">
+              <i class="icon icon-not-favorite"></i>
             </div>
           </div>
         </div>
       </div>
-      <div class="mini-player" v-show="!fullScreen">
+      <div class="mini-player" v-show="!fullScreen" @click="open">
           <div class="icon">
             <img width="40" height="40" :src="currentSong.image" alt="">
           </div>
-          <div class="next">
+          <div class="text">
             <h2 class="name" v-html="currentSong.name"></h2>
             <p class="desc" v-html="currentSong.singer"></p>
           </div>
+          <div class="control"></div>
           <div class="control">
             <i class="icon-playlist"></i>
           </div>
@@ -49,7 +56,7 @@
     </div>
 </template>
 <script>
-    import {mapGetters} from 'vuex'
+    import {mapGetters, mapMutations} from 'vuex'
     export default{
         data(){
             return{
@@ -59,12 +66,24 @@
         computed: {
           ...mapGetters([
               'fullScreen',
-              'currentIndex',
-              'playing'
+              'currentSong',
+              'playing',
+              'playList'
           ])
         },
         components:{
 
+        },
+        methods: {
+          back() {
+            this.setFullScreen(false)
+          },
+          open() {
+            this.setFullScreen(true)
+          },
+          ...mapMutations({
+            setFullScreen: 'SET_FULL_SCREEN'
+          })
         }
     }
 </script>
