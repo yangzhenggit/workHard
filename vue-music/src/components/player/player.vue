@@ -21,7 +21,7 @@
             <div class="middle-l">
               <div class="cd-wrapper" ref="cdWrapper">
                 <div class="cd">
-                  <img class="image" :src="currentSong.image" alt="">
+                  <img :class="cdCls" class="image" :src="currentSong.image" alt="">
                 </div>
               </div>
             </div>
@@ -32,13 +32,13 @@
                 <i class="icon-sequence"></i>
               </div>
               <div class="icon i-left">
-                <i class="icon-prev"></i>
+                <i class="icon-prev" @click="prev()"></i>
               </div>
               <div class="icon i-center">
-                <i class="icon-play"></i>
+                <i :class="[playing ? 'icon-pause' : 'icon-play']" @click="togglePlaying"></i>
               </div>
               <div class="icon i-right">
-                <div class="icon icon-next"></div>
+                <div class="icon icon-next" @click="next()"></div>
               </div>
               <div class="icon i-right">
                 <i class="icon icon-not-favorite"></i>
@@ -51,20 +51,22 @@
       <transition name="mini">
         <div class="mini-player" v-show="!fullScreen" @click="open">
           <div class="icon">
-            <img width="40" height="40" :src="currentSong.image" alt="">
+            <img :class="cdCls" width="40" height="40" :src="currentSong.image" alt="">
           </div>
           <div class="text">
             <h2 class="name" v-html="currentSong.name"></h2>
             <p class="desc" v-html="currentSong.singer"></p>
           </div>
           <div class="control">
-            <i class="icon-play-mini"></i>
+            <i :class="[playing ? 'icon-pause-mini' : 'icon-play-mini']" @click.stop="togglePlaying"></i>
           </div>
           <div class="control">
             <i class="icon-playlist"></i>
           </div>
         </div>
       </transition>
+      <audio ref="audio" :src="currentSong.url" @play="ready" @error="error" @timeupdate="updateTime"
+             ></audio>
     </div>
 </template>
 <script>
@@ -77,16 +79,26 @@
     export default{
         data(){
             return{
-
+              songReady: false,
+              currentTime: 0
             }
         },
         computed: {
+          cdCls() {
+            this.playing ? 'play' : 'play pause'
+          },
+          playIcon() {
+            return this.playing ? 'icon-pause' : 'icon-play'
+          },
           ...mapGetters([
               'fullScreen',
               'currentSong',
               'playing',
               'playList'
           ])
+        },
+        mounted() {
+
         },
         components:{
 
@@ -136,6 +148,9 @@
             this.$refs.cdWrapper.style.transition = ''
             this.$refs.cdWrapper.style[transform] = ''
           },
+          togglePlaying() {
+            this.setPlayingState(!this.playing)
+          },
           _getPosAndScale() {
             const targetWidth = 40
             const paddingLeft = 40
@@ -151,10 +166,52 @@
                 scale
             }
           },
+          prev() {
+            let index = this.currentIndex - 1;
+            if(index == -1) {
+              index = this.playList.length - 1
+              this.setCurrentIndex(index)
+            }
+          },
+          next() {
+            let index = this.currentIndex + 1;
+            if(index == this.playList.length) {
+              index = 0
+              this.setCurrentIndex(index)
+            }
+          },
+          ready() {
+            this.$nextTick( () => {
+                this.songReady = true
+            })
+          },
+          error() {
+            this.$nextTick( () => {
+              this.songReady = true
+            })
+          },
+          updateTime(e) {
+            this.currentTime = e.target.currentTime
+          },
           ...mapMutations({
-            setFullScreen: 'SET_FULL_SCREEN'
+            setFullScreen: 'SET_FULL_SCREEN',
+            setPlayingState: 'SET_PLAYING_STATE',
+            setCurrentIndex: 'SET_CURRENT_INDEX'
+          })
+        },
+      watch: {
+        currentSong() {
+          this.$nextTick( () => {
+            this.$refs.audio.play();
+          })
+        },
+        playing(newPlaying) {
+          const audio = this.$refs.audio
+          this.$nextTick(() => {
+            newPlaying ? audio.play() : audio.pause()
           })
         }
+      }
     }
 </script>
 <style scoped lang="stylus" rel="stylesheet/stylus">
