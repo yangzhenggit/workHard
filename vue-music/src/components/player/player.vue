@@ -20,13 +20,14 @@
           <div class="middle">
             <div class="middle-l">
               <div class="cd-wrapper" ref="cdWrapper">
-                <div class="cd">
-                  <img :class="cdCls" class="image" :src="currentSong.image" alt="">
+                <div class="cd" :class="cdCls">
+                  <img class="image" :src="currentSong.image" alt="">
                 </div>
               </div>
             </div>
           </div>
           <div class="bottom">
+            {{currentTime}}
             <div class="operators">
               <div class="icon i-left">
                 <i class="icon-sequence"></i>
@@ -38,7 +39,7 @@
                 <i :class="[playing ? 'icon-pause' : 'icon-play']" @click="togglePlaying"></i>
               </div>
               <div class="icon i-right">
-                <div class="icon icon-next" @click="next()"></div>
+                <i class="icon-next" @click="next()"></i>
               </div>
               <div class="icon i-right">
                 <i class="icon icon-not-favorite"></i>
@@ -85,7 +86,7 @@
         },
         computed: {
           cdCls() {
-            this.playing ? 'play' : 'play pause'
+            return this.playing ? 'play' : 'play pause'
           },
           playIcon() {
             return this.playing ? 'icon-pause' : 'icon-play'
@@ -94,7 +95,8 @@
               'fullScreen',
               'currentSong',
               'playing',
-              'playList'
+              'playList',
+              'currentIndex'
           ])
         },
         mounted() {
@@ -167,30 +169,36 @@
             }
           },
           prev() {
+            if (!this.songReady) {
+              return
+            }
             let index = this.currentIndex - 1;
             if(index == -1) {
               index = this.playList.length - 1
-              this.setCurrentIndex(index)
             }
+            this.setCurrentIndex(index)
+            this.songReady = false
           },
           next() {
-            let index = this.currentIndex + 1;
+            if (!this.songReady) {
+              alert(1);
+              return
+            }
+            var index = this.currentIndex + 1;
             if(index == this.playList.length) {
               index = 0
-              this.setCurrentIndex(index)
             }
+            this.setCurrentIndex(index)
+            this.songReady = false
           },
           ready() {
-            this.$nextTick( () => {
-                this.songReady = true
-            })
+            this.songReady = true
           },
           error() {
-            this.$nextTick( () => {
-              this.songReady = true
-            })
+            this.songReady = true
           },
           updateTime(e) {
+            debugger;
             this.currentTime = e.target.currentTime
           },
           ...mapMutations({
@@ -206,6 +214,7 @@
           })
         },
         playing(newPlaying) {
+          console.log(newPlaying)
           const audio = this.$refs.audio
           this.$nextTick(() => {
             newPlaying ? audio.play() : audio.pause()
