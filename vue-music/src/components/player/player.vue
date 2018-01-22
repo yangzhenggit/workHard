@@ -66,7 +66,7 @@
           </div>
         </div>
       </transition>
-      <audio ref="audio" :src="currentSong.url" @play="ready" @error="error" @timeupdate="updateTime"
+      <audio ref="audio" :src="currentSong.url" @canplay="ready" @error="error" @timeupdate="updateTime"
              ></audio>
     </div>
 </template>
@@ -198,7 +198,6 @@
             this.songReady = true
           },
           updateTime(e) {
-            debugger;
             this.currentTime = e.target.currentTime
           },
           ...mapMutations({
