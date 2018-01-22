@@ -27,7 +27,15 @@
             </div>
           </div>
           <div class="bottom">
-            {{currentTime}}
+            <!--progress-bar-->
+            <div class="progress-wrapper">
+              <span class="time time-l">{{format(currentTime)}}</span>
+              <div class="progress-bar-wrapper">
+                <progress-bar></progress-bar>
+              </div>
+              <span class="time time-r">{{format(currentSong.duration)}}</span>
+            </div>
+            <!--options-->
             <div class="operators">
               <div class="icon i-left">
                 <i class="icon-sequence"></i>
@@ -74,6 +82,7 @@
     import {mapGetters, mapMutations} from 'vuex'
     import animations from 'create-keyframe-animation'
     import {prefixStyle} from 'common/js/dom'
+    import ProgressBar from 'base/progress-bar/progress-bar'
 
     const transform = prefixStyle('transform')
     const transitionDuration = prefixStyle('transitionDuration')
@@ -103,7 +112,7 @@
 
         },
         components:{
-
+          ProgressBar
         },
         methods: {
           back() {
@@ -199,6 +208,21 @@
           },
           updateTime(e) {
             this.currentTime = e.target.currentTime
+          },
+          format(val) {
+            /*3.6 | 0 (向下取整)*/
+            val = val | 0
+            const minute = val / 60 | 0
+            const second = this._pad(val % 60)
+            return `${minute}:${second}`
+          },
+          _pad(val, n = 2) {
+            let len = val.toString().length
+            while (len < n) {
+              val = '0' + val
+              n++
+            }
+            return val
           },
           ...mapMutations({
             setFullScreen: 'SET_FULL_SCREEN',
