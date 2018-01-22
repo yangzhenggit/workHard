@@ -1,15 +1,41 @@
 <template>
-  <div class="progress-bar">
+  <div class="progress-bar" ref="progressBar">
     <div class="bar-inner">
       <div class="progress"></div>
-      <div class="progress-btn-wrapper">
+      <div class="progress-btn-wrapper" ref="progressBtn"
+          @touchstart="progressTouchStart"
+          @touchmove="progressTouchMove"
+          @touchend="progressTouchEnd"
+        >
         <div class="progress-btn"></div>
       </div>
     </div>
   </div>
 </template>
 <script type="text/ecmascript-6">
+  export default {
+      data() {
 
+      },
+      created() {
+          this.touches = {}
+      },
+      methods: {
+        progressTouchStart(e) {
+          this.touches.initiated = true;
+          this.touch.startX = e.touches[0].pageX
+        },
+        progressTouchMove() {
+
+        },
+        progressTouchEnd() {
+
+        }
+      },
+      watch: {
+
+      }
+  }
 </script>
 <style scoped lang="stylus" rel="stylesheet/stylus">
   @import "~common/stylus/variable"

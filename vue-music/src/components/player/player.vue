@@ -29,11 +29,11 @@
           <div class="bottom">
             <!--progress-bar-->
             <div class="progress-wrapper">
-              <span class="time time-l">{{format(currentTime)}}</span>
+              <span class="time time-l">65</span>
               <div class="progress-bar-wrapper">
                 <progress-bar></progress-bar>
               </div>
-              <span class="time time-r">{{format(currentSong.duration)}}</span>
+              <span class="time time-r">33</span>
             </div>
             <!--options-->
             <div class="operators">
