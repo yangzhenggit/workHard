@@ -31,7 +31,7 @@
             <div class="progress-wrapper">
               <span class="time time-l">65</span>
               <div class="progress-bar-wrapper">
-                <progress-bar></progress-bar>
+                <progress-bar :percent="percent"></progress-bar>
               </div>
               <span class="time time-r">33</span>
             </div>
@@ -99,6 +99,9 @@
           },
           playIcon() {
             return this.playing ? 'icon-pause' : 'icon-play'
+          },
+          percent() {
+            return this.currentTime / this.currentSong.duration
           },
           ...mapGetters([
               'fullScreen',
