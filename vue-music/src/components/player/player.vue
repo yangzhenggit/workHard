@@ -31,7 +31,7 @@
             <div class="progress-wrapper">
               <span class="time time-l">65</span>
               <div class="progress-bar-wrapper">
-                <progress-bar :percent="percent"></progress-bar>
+                <progress-bar :percent="percent" @progressChange="onProgressBarChange"></progress-bar>
               </div>
               <span class="time time-r">33</span>
             </div>
@@ -67,7 +67,9 @@
             <p class="desc" v-html="currentSong.singer"></p>
           </div>
           <div class="control">
-            <i :class="[playing ? 'icon-pause-mini' : 'icon-play-mini']" @click.stop="togglePlaying"></i>
+            <progress-circle :radius="radius" :percent="percent">
+              <i :class="[playing ? 'icon-pause-mini' : 'icon-play-mini']" @click.stop="togglePlaying"></i>
+            </progress-circle>
           </div>
           <div class="control">
             <i class="icon-playlist"></i>
@@ -83,6 +85,7 @@
     import animations from 'create-keyframe-animation'
     import {prefixStyle} from 'common/js/dom'
     import ProgressBar from 'base/progress-bar/progress-bar'
+    import ProgressCircle from 'base/progress-circle/progress-circle'
 
     const transform = prefixStyle('transform')
     const transitionDuration = prefixStyle('transitionDuration')
@@ -90,7 +93,8 @@
         data(){
             return{
               songReady: false,
-              currentTime: 0
+              currentTime: 0,
+              radius: 32
             }
         },
         computed: {
@@ -115,7 +119,8 @@
 
         },
         components:{
-          ProgressBar
+          ProgressBar,
+          ProgressCircle
         },
         methods: {
           back() {
@@ -227,6 +232,13 @@
             }
             return val
           },
+          onProgressBarChange(percent) {
+            this.currentTime = this.currentSong.duration * percent
+            this.$refs.audio.currentTime = this.currentTime
+            if (!this.playing) {
+              this.togglePlaying()
+            }
+          },
           ...mapMutations({
             setFullScreen: 'SET_FULL_SCREEN',
             setPlayingState: 'SET_PLAYING_STATE',
@@ -236,7 +248,7 @@
       watch: {
         currentSong() {
           this.$nextTick( () => {
-            this.$refs.audio.play();
+            this.$refs.audio.play()
           })
         },
         playing(newPlaying) {
