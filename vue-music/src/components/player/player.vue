@@ -25,6 +25,16 @@
                 </div>
               </div>
             </div>
+            <scroll class="middle-r" ref="lyricList" :data="currentLyric && currentLyric.lines">
+              <div class="lyric-wrapper">
+                <div v-if="currentLyric">
+                  <p ref="lyricLine"
+                     class="text"
+                     :class="{'current': currentLineNum ===index}"
+                     v-for="(line,index) in currentLyric.lines">{{line.txt}}</p>
+                </div>
+              </div>
+            </scroll>
           </div>
           <div class="bottom">
             <!--progress-bar-->
@@ -94,7 +104,11 @@
         return {
           songReady: false,
           currentTime: 0,
-          radius: 32
+          radius: 32,
+          currentLineNum: 0,
+          currentShow: 'cd',
+          currentLyric: null,
+          playingLyric: ''
         }
       },
       computed: {
