@@ -14,7 +14,7 @@
             <div class="recommend-list">
               <h1 id="copiedTarget" class="list-title">热门歌单推荐</h1>
               <ul>
-                <li v-for="item in discList" class="item">
+                <li @click="selectItem(item)" v-for="item in discList" class="item">
                   <div class="icon">
                     <img width="60" height="60" :src="item.imgurl" alt="">
                   </div>
@@ -30,6 +30,7 @@
           <loading></loading>
         </div>
       </scroll>
+      <router-view></router-view>
   </div>
 </template>
 <script type="text/ecmascript-6">
@@ -38,6 +39,7 @@
   import Slider from 'base/slider/slider'
   import Scroll from 'base/scroll/scroll'
   import loading from 'base/loading/loading'
+  import {mapMutations} from 'vuex'
   export default{
     data() {
       return {
@@ -63,7 +65,16 @@
             this.discList = res.data.list
           }
         })
-      }
+      },
+      selectItem(item) {
+        this.$router.push({
+          path: `/recommend/${item.disstid}`
+        })
+        this.setDisc(item)
+      },
+      ...mapMutations({
+        setDisc: 'SET_DESC'
+      })
     },
     components: {
       Slider,
